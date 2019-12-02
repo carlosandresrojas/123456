@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     EditText usuario, contraseña;
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+//    FirebaseDatabase firebaseDatabase;
+//    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registrar.setOnClickListener(this);
         registrarBD1.setOnClickListener(this);
 
-        inicializarFirebase();
+//        inicializarFirebase();
     }
 
-    private void inicializarFirebase() {
-        FirebaseApp.initializeApp(this);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
-    }
+//    private void inicializarFirebase() {
+//        FirebaseApp.initializeApp(this);
+//        firebaseDatabase = FirebaseDatabase.getInstance();
+//        databaseReference = firebaseDatabase.getReference();
+//    }
 
     public void onClick(View v){
 
@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     p.setId(UUID.randomUUID().toString());
                     p.setUsuario(user);
                     p.setContraseña(pass);
-                    databaseReference.child("Persona").child(p.getId()).setValue(p);
-
+//                    databaseReference.child("Persona").child(p.getId()).setValue(p);
                 }
 
                 break;
