@@ -31,7 +31,7 @@
                 android:orientation="vertical"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/titulo"
+                    android:id="@+id/titulo1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#FFF"
@@ -39,11 +39,12 @@
                     android:textSize="24sp"
                     android:text="Dashboard"/>
                 <TextView
-                    android:layout_below="@+id/titulo"
+                    android:id="@+id/titulo2"
+                    android:layout_below="@+id/titulo1"
                     android:layout_width="wrap_content"
                     android:textSize="14sp"
                     android:textColor="#FFF"
-                    android:text="Bienvenido Axroxe"
+                    android:text=""
                     android:layout_height="wrap_content" />
             </RelativeLayout>
         </RelativeLayout>

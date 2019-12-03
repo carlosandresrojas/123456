@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class dashboard extends AppCompatActivity {
+    private TextView titulo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,9 @@ public class dashboard extends AppCompatActivity {
                 startActivityForResult(intent,0);
             }
         });
+        titulo = findViewById(R.id.titulo2);
+
+        titulo.setText("Bienvenido " + getIntent().getStringExtra("Usuario"));
 
         Bundle parametros = this.getIntent().getExtras();
         if(parametros !=null){
