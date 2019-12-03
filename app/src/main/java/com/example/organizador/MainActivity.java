@@ -10,7 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.organizador.models.persona;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,8 +27,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     EditText usuario, contraseña;
 
-//    FirebaseDatabase firebaseDatabase;
-//    DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +51,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registrar.setOnClickListener(this);
         registrarBD1.setOnClickListener(this);
 
-//        inicializarFirebase();
+        inicializarFirebase();
+        mAuth = FirebaseAuth.getInstance();
     }
 
-//    private void inicializarFirebase() {
-//        FirebaseApp.initializeApp(this);
-//        firebaseDatabase = FirebaseDatabase.getInstance();
-//        databaseReference = firebaseDatabase.getReference();
-//    }
+    private void inicializarFirebase() {
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+       databaseReference = firebaseDatabase.getReference();
+       }
 
     public void onClick(View v){
 
@@ -63,36 +69,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.ingresar:
-                Intent intent = new Intent(v.getContext(), dashboard.class);
-                startActivityForResult(intent,0);
+//                Intent intent = new Intent(v.getContext(), dashboard.class);
+//                startActivityForResult(intent,0);
+                auth();
                 break;
             case R.id.registrar:
                 Intent intent2 = new Intent(v.getContext(), registro.class);
                 startActivityForResult(intent2,0);
                 break;
-            case R.id.registrarBD1:
-                if (user.equals(" ")|| pass.equals(" ")){
-                    validate ();
-            } else {
-                    persona p = new persona();
-                    p.setId(UUID.randomUUID().toString());
-                    p.setUsuario(user);
-                    p.setContraseña(pass);
-//                    databaseReference.child("Persona").child(p.getId()).setValue(p);
-                }
 
+            case R.id.registrarBD1:
+               register();
                 break;
         }
     }
 
-    private void validate() {
+    private void auth() {
+    }
+
+    private void register() {
         String user = usuario.getText().toString();
         String pass = contraseña.getText().toString();
 
-        if (user.equals("")){
-            usuario.setError("Requerrido");
-        } else if (pass.equals("")){
-            contraseña.setError("Requerrido");
-        }
+        mAuth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener((OnCompleteListener<AuthResult>) this)
     }
+
+//    private void validate() {
+//        String user = usuario.getText().toString();
+//        String pass = contraseña.getText().toString();
+//
+//        if (user.equals("")){
+//            usuario.setError("Requerrido");
+//        } else if (pass.equals("")){
+//            contraseña.setError("Requerrido");
+//        }
+//    }
 }
