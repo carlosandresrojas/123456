@@ -181,14 +181,38 @@
                             android:layout_height="wrap_content"
                             android:text="Femenino"/>
                     </RadioGroup>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/registrar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:padding="8dp"
+                        android:layout_marginRight="35dp"
                         android:textColor="#fff"
                         android:text="Registrarme"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/modificar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="35dp"
+                            android:layout_marginTop="20dp"
+                            android:padding="8dp"
+                            android:textColor="#fff"
+                            android:text="Modificar"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/eliminar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:padding="8dp"
+                            android:textColor="#fff"
+                            android:text="Eliminar"/>
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/ingresar"
                         android:layout_width="match_parent"
@@ -202,5 +226,13 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </GridLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <ListView
+            android:id="@+id/lista"
+            android:layout_width="match_parent"
+            android:layout_height="193dp">
+        </ListView>
     </LinearLayout>
 </ScrollView>

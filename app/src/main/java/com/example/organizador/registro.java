@@ -1,34 +1,51 @@
 package com.example.organizador;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.organizador.models.registro1;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class registro extends AppCompatActivity implements View.OnClickListener{
 
+    private List<registro1> lista = new ArrayList<registro1>();
+    ArrayAdapter<registro1> personaArrayAdapter;
+
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
-    private Button registrar;
+    private Button registrar, modificar, eliminar;
+    private ListView lista_persona;
+
 
     private TextView ingresar;
     EditText nombre, apellido, correo, nombre_usuario, direccion, contraseña, celular,contraseña2;
     RadioButton f,m;
+
+    registro1 personaSeleccionada;
 
 
     @Override
@@ -42,6 +59,10 @@ public class registro extends AppCompatActivity implements View.OnClickListener{
 
         registrar = ( Button ) findViewById(R.id.registrar);
         ingresar= ( TextView ) findViewById(R.id.ingresar);
+        modificar = ( Button ) findViewById(R.id.modificar);
+        eliminar = ( Button ) findViewById(R.id.eliminar);
+
+        lista_persona = findViewById(R.id.lista);
 
         nombre = findViewById(R.id.nombre);
         apellido = findViewById( R.id.apellido);
@@ -52,12 +73,54 @@ public class registro extends AppCompatActivity implements View.OnClickListener{
         celular = findViewById(R.id.celular);
         contraseña2 = findViewById( R.id.contraseña2);
 
+
         f = findViewById(R.id.f);
         m = findViewById(R.id.m);
 
         registrar.setOnClickListener(this);
         ingresar.setOnClickListener(this);
+        modificar.setOnClickListener(this);
+        eliminar.setOnClickListener(this);
        inicializarFirebase();
+       listarDatos ();
+
+       lista_persona.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               personaSeleccionada = (registro1) adapterView.getItemAtPosition(i);
+               nombre.setText(personaSeleccionada.getNombre());
+               apellido.setText(personaSeleccionada.getApellido());
+               correo.setText(personaSeleccionada.getCorreo());
+               nombre_usuario.setText(personaSeleccionada.getNombre_usuario());
+               direccion.setText(personaSeleccionada.getDirección());
+               contraseña.setText(personaSeleccionada.getContraseña());
+               celular.setText(personaSeleccionada.getCelular());
+               contraseña2.setText(personaSeleccionada.getContraseña2());
+           }
+       });
+    }
+
+    private void listarDatos() {
+        databaseReference.child("registro1").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lista.clear();
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()){
+                    registro1 p = objSnapshot.getValue(registro1.class);
+                    lista.add(p);
+
+                    personaArrayAdapter = new ArrayAdapter<registro1>(registro.this, android.R.layout.simple_list_item_1, lista);
+                    lista_persona.setAdapter(personaArrayAdapter);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void inicializarFirebase() {
@@ -117,8 +180,44 @@ public class registro extends AppCompatActivity implements View.OnClickListener{
                 }
 
                 break;
+            case R.id.modificar:
+                registro1 r = new registro1();
+                r.setId(personaSeleccionada.getId());
+
+                r.setNombre(nombre1);
+                r.setApellido(apellido1);
+                r.setNombre_usuario(nombre_usuario1);
+                r.setDirección(direccion1);
+                r.setCorreo(correo1);
+                r.setContraseña(contraseña1);
+                r.setCelular(celular1);
+                r.setContraseña2(contraseña22);
+                databaseReference.child("registro1").child(r.getId()).setValue(r);
+                Toast.makeText(this, "Actualizado", Toast.LENGTH_LONG).show();
+                clear ();
+                break;
+            case R.id.eliminar:
+                registro1 re = new registro1();
+                re.setId(personaSeleccionada.getId());
+                databaseReference.child("registro1").child(re.getId()).removeValue();
+                Toast.makeText(this, "Eliminado", Toast.LENGTH_LONG).show();
+                clear();
+                break;
         }
     }
+
+    private void clear() {
+        nombre.setText("");
+        apellido.setText("");
+        direccion.setText("");
+        contraseña.setText("");
+        contraseña2.setText("");
+        nombre_usuario.setText("");
+        correo.setText("");
+        celular.setText("");
+
+    }
+
 
     private void validate() {
         String nombre1 = nombre.getText().toString();
@@ -151,6 +250,8 @@ public class registro extends AppCompatActivity implements View.OnClickListener{
             contraseña2.setError("Requerrido");
         }
     }
+
+
 }
 
 

@@ -105,6 +105,7 @@ public class registro1 {
     }
 
     private String id;
+    public String toString() { return nombre; }
 }
 
 
